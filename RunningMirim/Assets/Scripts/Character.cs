@@ -25,11 +25,15 @@ public class Character : MonoBehaviour {
     //게임컨트롤러 접근 위한 선언
     public GameController GC;
 
+    //trigger 제어
+    public static bool isTriggerOn;
+
     // Use this for initialization
     void Start () {
         myAnimator = GetComponent<Animator>();
         grounded = true;
         powerTime = 7.0f;
+        isTriggerOn = true;
     }
 	
 	// Update is called once per frame
@@ -77,21 +81,36 @@ public class Character : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.transform.tag.Equals("powerup"))
+        if (isTriggerOn==true)
         {
-            Destroy(col.gameObject);
-            power = true;
+            if (col.transform.tag.Equals("powerup"))
+            {
+                Destroy(col.gameObject);
+                power = true;
+            }
+            //power모드일때는 장애물무시
+            else if (col.transform.tag.Equals("DamageBox") && power == false)
+            {
+                //게임오버
+                GC.GameOver();
+            }
+            else if (col.transform.tag.Equals("Jelly"))
+            {
+                GC.jellyScore += 500;
+                Destroy(col.gameObject);
+            }
+            else if (col.transform.tag.Equals("H"))   { Destroy(col.gameObject); GC.helloWorldLetter[0].gameObject.SetActive(true); }
+            else if (col.transform.tag.Equals("E")) { Destroy(col.gameObject); GC.helloWorldLetter[1].gameObject.SetActive(true); }
+            else if (col.transform.tag.Equals("L_1")) { Destroy(col.gameObject); GC.helloWorldLetter[2].gameObject.SetActive(true); }
+            else if (col.transform.tag.Equals("L_2")) { Destroy(col.gameObject); GC.helloWorldLetter[3].gameObject.SetActive(true); }
+            else if (col.transform.tag.Equals("O_1")) { Destroy(col.gameObject); GC.helloWorldLetter[4].gameObject.SetActive(true); }
+            else if (col.transform.tag.Equals("W")) { Destroy(col.gameObject); GC.helloWorldLetter[5].gameObject.SetActive(true); }
+            else if (col.transform.tag.Equals("O_2")) { Destroy(col.gameObject); GC.helloWorldLetter[6].gameObject.SetActive(true); }
+            else if (col.transform.tag.Equals("R")) { Destroy(col.gameObject); GC.helloWorldLetter[7].gameObject.SetActive(true); }
+            else if (col.transform.tag.Equals("L_3")) { Destroy(col.gameObject); GC.helloWorldLetter[8].gameObject.SetActive(true); }
+            else if (col.transform.tag.Equals("D")) { Destroy(col.gameObject); GC.helloWorldLetter[9].gameObject.SetActive(true); }
+
         }
-        //power모드일때는 장애물무시
-        else if (col.transform.tag.Equals("DamageBox") && power==false)
-        {
-            //게임오버
-            GC.GameOver();
-        }
-        else if (col.transform.tag.Equals("Jelly"))
-        {
-            GC.jellyScore++;
-            Destroy(col.gameObject);
-        }
+        
     }
 }

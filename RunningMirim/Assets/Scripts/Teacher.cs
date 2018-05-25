@@ -8,8 +8,8 @@ public class Teacher : MonoBehaviour {
     public string state;
     public bool isGreet;
 
-    // Use this for initialization
-    void Start () {
+	// Use this for initialization
+	void Start () {
         state = "teacher_normal";
         isGreet = false;
     }
@@ -34,6 +34,8 @@ public class Teacher : MonoBehaviour {
                 isGreet = true;
                 GameController.isDanger = true;
                 //점수깎이기
+                HPManager.time -= 20;
+
             }
         }
 
