@@ -38,6 +38,7 @@ public class GameController : MonoBehaviour {
 
     //helloworld 메뉴
     public List<Image> helloWorldLetter;//helloWorld위에있는 letter종류
+    public bool[] helloJelly=new bool[9];
 
     //인사안했을때 화면 붉게
     public GameObject DangerBox;
@@ -56,7 +57,6 @@ public class GameController : MonoBehaviour {
         isGamePlaying = true;
         Time.timeScale = 1;
         isDanger = false;
-
     }
 
     // Update is called once per frame

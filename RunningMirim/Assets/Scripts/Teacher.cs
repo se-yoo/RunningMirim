@@ -17,7 +17,7 @@ public class Teacher : MonoBehaviour {
     private void Update()
     {
         //선생님 상태변화(선생님이 미림이 발견후)
-        if (4.7f >= GetComponent<Transform>().transform.position.x && isGreet == false && !Character.power)
+        if (4.7f >= GetComponent<Transform>().transform.position.x && isGreet == false && !Character.bonus)
         {
             if(Character.greet)//인사 했을때(선생님 표정바뀌고 인사처리 isGreet)
             {
@@ -32,9 +32,12 @@ public class Teacher : MonoBehaviour {
             {
                 state = "teacher_angry";//인사안하고 지나쳤을때(화난표정)
                 isGreet = true;
-                GameController.isDanger = true;
-                //점수깎이기
-                HPManager.time -= 20;
+                if (!Character.power)//파워 상태에는 인사 안해도 상관없게
+                {
+                    GameController.isDanger = true;
+                    //점수깎이기
+                    HPManager.time -= 20;
+                }
 
             }
         }

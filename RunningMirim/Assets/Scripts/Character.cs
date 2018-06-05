@@ -20,7 +20,7 @@ public class Character : MonoBehaviour {
     private float powerTime;
 
     //보너스(사복)
-    public bool bonus;
+    public static bool bonus;
 
     //게임컨트롤러 접근 위한 선언
     public GameController GC;
@@ -52,6 +52,15 @@ public class Character : MonoBehaviour {
                 power = false;
                 powerTime = 7.0f;
             }
+        }
+
+        for(int i = 0; i < 10; i++)
+        {
+            if (GC.helloJelly[i] && i == 9)
+            {
+                bonus = true;
+            }
+            else if (!GC.helloJelly[i]) break;
         }
 
         myAnimator.SetBool("Grounded", grounded);
@@ -99,16 +108,16 @@ public class Character : MonoBehaviour {
                 GC.jellyScore += 500;
                 Destroy(col.gameObject);
             }
-            else if (col.transform.tag.Equals("H"))   { Destroy(col.gameObject); GC.helloWorldLetter[0].gameObject.SetActive(true); }
-            else if (col.transform.tag.Equals("E")) { Destroy(col.gameObject); GC.helloWorldLetter[1].gameObject.SetActive(true); }
-            else if (col.transform.tag.Equals("L_1")) { Destroy(col.gameObject); GC.helloWorldLetter[2].gameObject.SetActive(true); }
-            else if (col.transform.tag.Equals("L_2")) { Destroy(col.gameObject); GC.helloWorldLetter[3].gameObject.SetActive(true); }
-            else if (col.transform.tag.Equals("O_1")) { Destroy(col.gameObject); GC.helloWorldLetter[4].gameObject.SetActive(true); }
-            else if (col.transform.tag.Equals("W")) { Destroy(col.gameObject); GC.helloWorldLetter[5].gameObject.SetActive(true); }
-            else if (col.transform.tag.Equals("O_2")) { Destroy(col.gameObject); GC.helloWorldLetter[6].gameObject.SetActive(true); }
-            else if (col.transform.tag.Equals("R")) { Destroy(col.gameObject); GC.helloWorldLetter[7].gameObject.SetActive(true); }
-            else if (col.transform.tag.Equals("L_3")) { Destroy(col.gameObject); GC.helloWorldLetter[8].gameObject.SetActive(true); }
-            else if (col.transform.tag.Equals("D")) { Destroy(col.gameObject); GC.helloWorldLetter[9].gameObject.SetActive(true); }
+            else if (col.transform.tag.Equals("H"))   { Destroy(col.gameObject); GC.helloWorldLetter[0].gameObject.SetActive(true); GC.helloJelly[0] = true; }
+            else if (col.transform.tag.Equals("E")) { Destroy(col.gameObject); GC.helloWorldLetter[1].gameObject.SetActive(true); GC.helloJelly[1] = true; }
+            else if (col.transform.tag.Equals("L_1")) { Destroy(col.gameObject); GC.helloWorldLetter[2].gameObject.SetActive(true); GC.helloJelly[2] = true; }
+            else if (col.transform.tag.Equals("L_2")) { Destroy(col.gameObject); GC.helloWorldLetter[3].gameObject.SetActive(true); GC.helloJelly[3] = true; }
+            else if (col.transform.tag.Equals("O_1")) { Destroy(col.gameObject); GC.helloWorldLetter[4].gameObject.SetActive(true); GC.helloJelly[4] = true; }
+            else if (col.transform.tag.Equals("W")) { Destroy(col.gameObject); GC.helloWorldLetter[5].gameObject.SetActive(true); GC.helloJelly[5] = true; }
+            else if (col.transform.tag.Equals("O_2")) { Destroy(col.gameObject); GC.helloWorldLetter[6].gameObject.SetActive(true); GC.helloJelly[6] = true; }
+            else if (col.transform.tag.Equals("R")) { Destroy(col.gameObject); GC.helloWorldLetter[7].gameObject.SetActive(true); GC.helloJelly[7] = true; }
+            else if (col.transform.tag.Equals("L_3")) { Destroy(col.gameObject); GC.helloWorldLetter[8].gameObject.SetActive(true); GC.helloJelly[8] = true; }
+            else if (col.transform.tag.Equals("D")) { Destroy(col.gameObject); GC.helloWorldLetter[9].gameObject.SetActive(true); GC.helloJelly[9] = true; }
 
         }
         
