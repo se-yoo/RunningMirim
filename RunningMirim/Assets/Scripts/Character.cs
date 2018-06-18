@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Character : MonoBehaviour {
-    
+
+public class Character : MonoBehaviour
+{
+
     //캐릭터 애니메이션 제어
     private Animator myAnimator;
 
@@ -11,10 +14,11 @@ public class Character : MonoBehaviour {
     public bool grounded;
     public LayerMask whatIsGround; //땅이랑 닿아있는지 확인하게 해줌 list
     public GameObject Ground;
-    public int jumpCnt=0;
+    public int jumpCnt = 0;
 
     //인사
     public static bool greet;
+    public float greetTime;
 
     //파워(체육복)
     public static bool power;
@@ -33,7 +37,8 @@ public class Character : MonoBehaviour {
     public static bool isTriggerOn;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         myAnimator = GetComponent<Animator>();
         grounded = true;
         powerTime = 7.0f;
@@ -41,10 +46,12 @@ public class Character : MonoBehaviour {
         realBonusTime = 10.0f;
         isTriggerOn = true;
         jumpCnt = 0;
+        greetTime = 0f;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         //점프하면서 인사했을때 인사되게
         if (!greet) grounded = Physics2D.IsTouchingLayers(GetComponent<Collider2D>(), whatIsGround);
         else grounded = true;
@@ -55,7 +62,8 @@ public class Character : MonoBehaviour {
         if (power)//일정시간 지나면 파워 풀림
         {
             powerTime -= Time.deltaTime;
-            if (powerTime < 0){
+            if (powerTime < 0)
+            {
                 power = false;
                 powerTime = 7.0f;
             }
@@ -63,6 +71,7 @@ public class Character : MonoBehaviour {
 
         if (bonus)//일정시간 지나면 보너스 풀림
         {
+
             if (bonusTime > 11.5f) MoveUp();
             bonusTime -= Time.deltaTime;
             if (bonusTime < 0)
@@ -111,6 +120,16 @@ public class Character : MonoBehaviour {
         myAnimator.SetBool("Greet", greet);
         myAnimator.SetBool("Power", power);
         myAnimator.SetBool("Bonus", bonus);
+
+        if (greet)
+        {
+            greetTime += Time.deltaTime;
+        }
+        if (greetTime > 1.0f)
+        {
+            greetTime = 0f;
+            greet = false;
+        }
     }
 
     public void JumpBtn()
@@ -119,6 +138,7 @@ public class Character : MonoBehaviour {
         if (jumpCnt < 2)// 점프 연속으로 두번까지만 할 수 있게
         {
             GetComponent<Rigidbody2D>().AddForce(Vector2.up * 320f);
+            GameObject.Find("Jump").GetComponent<AudioSource>().Play();
         }
         else jumpCnt = 2;
     }
@@ -148,6 +168,7 @@ public class Character : MonoBehaviour {
                 GameController.isDanger = true;
                 //점수깎이기
                 HPManager.time -= 30;
+                GameObject.Find("CrashSound").GetComponent<AudioSource>().Play();
             }
             else if (col.transform.tag.Equals("Jelly"))
             {
@@ -158,6 +179,15 @@ public class Character : MonoBehaviour {
             {
                 GC.jellyScore += 700;
                 Destroy(col.gameObject);
+            }
+            else if (col.transform.tag.Equals("love"))
+            {
+                Destroy(col.gameObject);
+                HPManager.time += 20;
+                if (HPManager.time > 100f)
+                {
+                    HPManager.time = 100f;
+                }
             }
             else if (col.transform.tag.Equals("H")) { Destroy(col.gameObject); GC.helloWorldLetter[0].gameObject.SetActive(true); GC.helloJelly[0] = true; }
             else if (col.transform.tag.Equals("E")) { Destroy(col.gameObject); GC.helloWorldLetter[1].gameObject.SetActive(true); GC.helloJelly[1] = true; }
@@ -175,11 +205,15 @@ public class Character : MonoBehaviour {
     private void MoveUp()
     {
         transform.Translate(Vector2.up * 0.5f);
+        GameObject.Find("BackgroundSound").GetComponent<AudioSource>().Stop();
+        GameObject.Find("BonusTimeSound").GetComponent<AudioSource>().Play();
     }
 
     private void MoveDown()
-    {   
+    {
         Ground.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("ground") as Sprite;
         Ground.transform.position = new Vector3(Ground.transform.position.x, -4.55f, Ground.transform.position.z);
+        GameObject.Find("BackgroundSound").GetComponent<AudioSource>().Play();
+        GameObject.Find("BonusTimeSound").GetComponent<AudioSource>().Stop();
     }
 }
